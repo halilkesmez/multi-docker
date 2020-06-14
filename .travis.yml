@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t hkesmez/react-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run -e CI=true USERNAME/react-test npm test
+
+after_success:
+  - docker build -t hkesmez/multi-client ./client
+  - docker build -t hkesmez/multi-worker ./worker
+  - docker build -t hkesmez/multi-nginx ./nginx
+  - docker build -t hkesmez/multi-server ./server
+  # log in to the docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take those images and push thme to the docker hub
+  - docker push hkesmez/multi-client
+  - docker push hkesmez/multi-worker
+  - docker push hkesmez/multi-nginx
+  - docker push hkesmez/multi-server
