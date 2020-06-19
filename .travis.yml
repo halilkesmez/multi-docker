@@ -1,4 +1,4 @@
-language: generic 
+language: generic
 sudo: required
 services:
   - docker
@@ -21,3 +21,16 @@ after_success:
   - docker push hkesmez/multi-worker
   - docker push hkesmez/multi-nginx
   - docker push hkesmez/multi-server
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "multi-docker"
+  env: "MultiDocker-env"
+  bucket_name: "elasticbeanstalk-us-east-2-570889834396"
+  bucket_path: "docker-multi"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: "$AWS_SECRET_KEY"
