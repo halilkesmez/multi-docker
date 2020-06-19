@@ -21,10 +21,9 @@ after_success:
   - docker push hkesmez/multi-worker
   - docker push hkesmez/multi-nginx
   - docker push hkesmez/multi-server
-  
+
 
 deploy:
-  edge: true
   provider: elasticbeanstalk
   region: "us-east-2"
   app: "multi-docker"
